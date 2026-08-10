@@ -1,6 +1,7 @@
 package com.app.mydata.domain.mydata.api;
 
 import com.app.mydata.domain.mydata.dto.request.MydataRiaAccountRequestDTO;
+import com.app.mydata.domain.mydata.dto.request.RiaAccountLimitUpdateRequestDTO;
 import com.app.mydata.domain.mydata.dto.request.RiaAccountRequestDTO;
 import com.app.mydata.domain.mydata.dto.response.MydataRiaAccountResponseDTO;
 import com.app.mydata.domain.mydata.service.MydataRiaAccountService;
@@ -30,6 +31,11 @@ public class MydataRiaAccountApi {
 
     @PostMapping("/save")
     public ResponseEntity<ApiResponseDTO<MydataRiaAccountResponseDTO>> createAccount(@Valid @RequestBody RiaAccountRequestDTO riaAccountRequestDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseDTO.of("myData RIA 계좌 등록 성공", mydataRiaAccountService.saveRiaAccount(riaAccountRequestDTO)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseDTO.of("myData RIA 계좌 등록 성공", mydataRiaAccountService.createRiaAccount(riaAccountRequestDTO)));
+    }
+
+    @PutMapping("/limit-update")
+    public ResponseEntity<ApiResponseDTO<MydataRiaAccountResponseDTO>> updateAccountLimit(@Valid @RequestBody RiaAccountLimitUpdateRequestDTO request) {
+        return ResponseEntity.ok(ApiResponseDTO.of("myData RIA 계좌 한도 변경 성공", mydataRiaAccountService.updateRiaAccountLimit(request)));
     }
 }

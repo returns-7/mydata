@@ -136,8 +136,8 @@ class MydataRiaAccountMapperTest {
     }
 
     @Test
-    @DisplayName("계좌 ID, ciHash, 증권사명이 일치하면 한도와 누적매도금액을 수정한다")
-    void updateAccountUpdatesMatchingAccount() {
+    @DisplayName("계좌 ID, ciHash, 증권사명이 일치하면 한도만 수정한다")
+    void updateAccountUpdatesOnlyLimitOfMatchingAccount() {
         insertAccount("ci-1", "증권사A");
         MydataRiaAccountDTO savedAccount = mydataRiaAccountMapper.selectByCiHash("ci-1").get(0);
         savedAccount.setRiaLimit(BigDecimal.valueOf(40_000_000));
@@ -147,7 +147,7 @@ class MydataRiaAccountMapperTest {
 
         MydataRiaAccountDTO result = mydataRiaAccountMapper.selectByCiHash("ci-1").get(0);
         assertThat(result.getRiaLimit()).isEqualByComparingTo(BigDecimal.valueOf(40_000_000));
-        assertThat(result.getRiaCumulativeSell()).isEqualByComparingTo(BigDecimal.valueOf(10_000_000));
+        assertThat(result.getRiaCumulativeSell()).isEqualByComparingTo(BigDecimal.ZERO);
     }
 
     private void resetSchema() throws SQLException {

@@ -23,7 +23,7 @@
 
     <update id="updateAccount" parameterType="MydataRiaAccountDTO">
         update mydata_ria_account
-            set ria_limit = #{riaLimit}, ria_cumulative_sell = #{riaCumulativeSell}
+            set ria_limit = #{riaLimit}
         where mydata_account_id = #{mydataAccountId}
             AND
                 ci_hash = #{ciHash}
