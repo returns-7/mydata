@@ -2,6 +2,7 @@ package com.app.mydata.domain.mydata.mapper;
 
 import com.app.mydata.domain.mydata.dto.MydataRiaAccountDTO;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -227,12 +228,28 @@ class MydataRiaAccountMapperTest {
             if (!start.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("동시 upsert 시작 대기 시간 초과");
             }
-            try (SqlSession concurrentSession = sqlSessionFactory.openSession(true)) {
-                concurrentSession.getMapper(MydataRiaAccountMapper.class).upsertAccount(accountDTO);
-            }
+            upsertWithRetry(accountDTO);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException("동시 upsert가 중단되었습니다.", e);
+        }
+    }
+
+    private void upsertWithRetry(MydataRiaAccountDTO accountDTO) {
+        try {
+            upsertOnce(accountDTO);
+        } catch (PersistenceException e) {
+            // H2의 MERGE INTO는 Postgres의 ON CONFLICT DO UPDATE와 달리 동시 upsert에
+            // 원자성을 보장하지 않아 유니크 제약 위반이 날 수 있다. 운영에서는
+            // MydataRiaAccountUpsertExecutor가 같은 이유로 새 트랜잭션에서 1회 재시도하므로,
+            // 이 테스트도 그 재시도 계약을 그대로 반영한다.
+            upsertOnce(accountDTO);
+        }
+    }
+
+    private void upsertOnce(MydataRiaAccountDTO accountDTO) {
+        try (SqlSession concurrentSession = sqlSessionFactory.openSession(true)) {
+            concurrentSession.getMapper(MydataRiaAccountMapper.class).upsertAccount(accountDTO);
         }
     }
 
