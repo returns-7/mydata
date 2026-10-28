@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.mydata.domain.mydata.mapper.MydataKeyMapper">
+
+    <select id="existsByCiHash" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM mydata_key WHERE ci_hash = #{ciHash}
+    </select>
+
+    <insert id="insertKey" parameterType="String">
+        INSERT INTO mydata_key (ci_hash)
+        VALUES (#{ciHash})
+    </insert>
+
+</mapper>

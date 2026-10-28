@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.mydata.domain.mydata.mapper.MydataRiaAccountMapper">
+
+    <select id="selectByCiHash" parameterType="String" resultType="MydataRiaAccountDTO">
+        SELECT mydata_account_id, ci_hash, broker_name, ria_limit, ria_cumulative_sell
+        FROM mydata_ria_account
+        WHERE ci_hash = #{ciHash}
+    </select>
+
+    <insert id="insertAccount" parameterType="MydataRiaAccountDTO">
+        INSERT INTO mydata_ria_account (ci_hash, broker_name, ria_limit, ria_cumulative_sell)
+        VALUES (#{ciHash}, #{brokerName}, #{riaLimit}, #{riaCumulativeSell})
+    </insert>
+
+    <insert id="upsertAccount" parameterType="MydataRiaAccountDTO" databaseId="postgresql">
+        INSERT INTO mydata_ria_account (ci_hash, broker_name, ria_limit, ria_cumulative_sell)
+        VALUES (#{ciHash}, #{brokerName}, #{riaLimit}, 0)
+        ON CONFLICT (ci_hash, broker_name)
+        DO UPDATE SET ria_limit = EXCLUDED.ria_limit
+    </insert>
+
+    <insert id="upsertAccount" parameterType="MydataRiaAccountDTO" databaseId="h2">
+        MERGE INTO mydata_ria_account target
+        USING (VALUES (#{ciHash}, #{brokerName}, #{riaLimit})) source(ci_hash, broker_name, ria_limit)
+        ON target.ci_hash = source.ci_hash AND target.broker_name = source.broker_name
+        WHEN MATCHED THEN UPDATE SET ria_limit = source.ria_limit
+        WHEN NOT MATCHED THEN INSERT (ci_hash, broker_name, ria_limit, ria_cumulative_sell)
+        VALUES (source.ci_hash, source.broker_name, source.ria_limit, 0)
+    </insert>
+
+    <select id="selectByCiHashAndBrokerName" parameterType="MydataRiaAccountDTO" resultType="MydataRiaAccountDTO">
+        SELECT mydata_account_id, ci_hash, broker_name, ria_limit, ria_cumulative_sell
+        FROM mydata_ria_account
+        WHERE ci_hash = #{ciHash} AND broker_name = #{brokerName}
+    </select>
+
+</mapper>

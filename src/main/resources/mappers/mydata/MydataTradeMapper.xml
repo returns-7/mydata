@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.mydata.domain.mydata.mapper.MydataTradeMapper">
+
+    <select id="selectByCiHashAndPeriod" parameterType="MydataTradeRequestDTO" resultType="MydataTradeDTO">
+        SELECT trade_id, ci_hash, broker_name, trade_type, stock_type, fund_code, ticker, qty, trade_date, amount
+        FROM mydata_trade
+        WHERE ci_hash = #{ciHash}
+        <if test="fromDate != null">
+            AND trade_date &gt;= #{fromDate}
+        </if>
+        <if test="toDate != null">
+            AND trade_date &lt;= #{toDate}
+        </if>
+        ORDER BY trade_date
+    </select>
+
+    <insert id="insertTrade" parameterType="MydataTradeDTO">
+        INSERT INTO mydata_trade (ci_hash, broker_name, trade_type, stock_type, fund_code, ticker, qty, trade_date,
+        amount)
+        VALUES (#{ciHash}, #{brokerName}, #{tradeType}, #{stockType}, #{fundCode}, #{ticker}, #{qty}, #{tradeDate},
+        #{amount})
+    </insert>
+
+</mapper>

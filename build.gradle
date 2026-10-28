@@ -26,6 +26,9 @@ dependencies {
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
     runtimeOnly 'org.postgresql:postgresql'
 
+    // 컨테이너 헬스체크용 /actuator/health
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // Swagger - 팀원들이 API 스펙 봐야 하니 필수
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.17'
 

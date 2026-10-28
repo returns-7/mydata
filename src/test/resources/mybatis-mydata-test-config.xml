@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="MydataTradeDTO" type="com.app.mydata.domain.mydata.dto.MydataTradeDTO"/>
+        <typeAlias alias="MydataTradeRequestDTO" type="com.app.mydata.domain.mydata.dto.request.MydataTradeRequestDTO"/>
+        <typeAlias alias="MydataRiaAccountDTO" type="com.app.mydata.domain.mydata.dto.MydataRiaAccountDTO"/>
+        <typeAlias alias="MydataFundDTO" type="com.app.mydata.domain.mydata.dto.MydataFundDTO"/>
+    </typeAliases>
+
+    <environments default="mydata-mapper-test">
+        <environment id="mydata-mapper-test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="org.h2.Driver"/>
+                <property name="url" value="jdbc:h2:mem:mydata_mapper_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE"/>
+                <property name="username" value="sa"/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="PostgreSQL" value="postgresql"/>
+        <property name="H2" value="h2"/>
+    </databaseIdProvider>
+
+    <mappers>
+        <mapper resource="mappers/mydata/MydataTradeMapper.xml"/>
+        <mapper resource="mappers/mydata/MydataRiaAccountMapper.xml"/>
+        <mapper resource="mappers/mydata/MydataFundMapper.xml"/>
+    </mappers>
+</configuration>

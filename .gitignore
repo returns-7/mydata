@@ -8,19 +8,12 @@ HELP.md
 .env.*
 !.env.example
 
-/src/main/resources/application.yml
-/src/main/resources/application.yaml
-/src/main/resources/application-*.yml
-/src/main/resources/application-*.yaml
-
-!/src/main/resources/application.example.yml
-!/src/main/resources/application.example.yaml
-
-!application.example.yml
-
 # Gradle
 .gradle/
 build/
+
+# Local scratch/log files
+scratchpad/
 
 ### STS ###
 .apt_generated
@@ -43,3 +36,4 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 *.yaml
+.omc

@@ -1,0 +1,11 @@
+# 운영 프로필 — SPRING_PROFILES_ACTIVE=prod. 값이 아니라 동작만 다른 설정을 둔다
+logging:
+  level:
+    # SQL 파라미터(ci_hash 등)가 로그에 남지 않게
+    org.mybatis: INFO
+    org.apache.ibatis: INFO
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
