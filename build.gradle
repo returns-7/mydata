@@ -18,6 +18,24 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    dependencies {
+        // Tomcat CRITICAL 5건 (보안점검 §2-2)
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.59') {
+            entry 'tomcat-embed-core'
+            entry 'tomcat-embed-el'
+            entry 'tomcat-embed-websocket'
+        }
+        // Jackson HIGH 5건 (보안점검 §2-2)
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.21.7') {
+            entry 'jackson-core'
+            entry 'jackson-databind'
+        }
+        // PostgreSQL HIGH 1건 (보안점검 §2-2)
+        dependency 'org.postgresql:postgresql:42.7.12'
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
