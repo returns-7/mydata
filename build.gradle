@@ -18,23 +18,10 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    dependencies {
-        // Tomcat CRITICAL 5건 (보안점검 §2-2)
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.59') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-el'
-            entry 'tomcat-embed-websocket'
-        }
-        // Jackson HIGH 5건 (보안점검 §2-2)
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.21.7') {
-            entry 'jackson-core'
-            entry 'jackson-databind'
-        }
-        // PostgreSQL HIGH 1건 (보안점검 §2-2)
-        dependency 'org.postgresql:postgresql:42.7.12'
-    }
-}
+// 보안점검 §2-2 — Boot BOM 버전 속성 재정의 (Boot 업그레이드 시 제거)
+ext['tomcat.version'] = '10.1.59'        // CRITICAL 5건
+ext['jackson-bom.version'] = '2.21.7'   // HIGH 5건
+ext['postgresql.version'] = '42.7.12'   // HIGH 1건
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
