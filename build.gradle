@@ -18,6 +18,11 @@ repositories {
     mavenCentral()
 }
 
+// 보안점검 §2-2 — Boot BOM 버전 속성 재정의 (Boot 업그레이드 시 제거)
+ext['tomcat.version'] = '10.1.59'        // CRITICAL 5건
+ext['jackson-bom.version'] = '2.21.7'   // HIGH 5건
+ext['postgresql.version'] = '42.7.12'   // HIGH 1건
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

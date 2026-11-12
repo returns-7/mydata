@@ -2,6 +2,7 @@ package com.app.mydata.global.exception;
 
 import com.app.mydata.domain.member.exception.MemberException;
 import com.app.mydata.domain.member.exception.MemberNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import com.app.mydata.domain.mydata.exception.*;
 import com.app.mydata.global.response.ApiResponseDTO;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -64,6 +66,13 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(BindException.class)
   public ResponseEntity<ApiResponseDTO<Void>> handleBindException(BindException e) {
     return validationError(e.getBindingResult());
+  }
+
+  // 6. 폴백 — 위에서 처리되지 않은 모든 예외
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ApiResponseDTO<Void>> handleUnexpected(Exception e) {
+    log.error("[MYDATA] 처리되지 않은 예외", e);
+    return ResponseEntity.internalServerError().body(ApiResponseDTO.of("서버 오류가 발생했습니다."));
   }
 
   private ResponseEntity<ApiResponseDTO<Void>> validationError(BindingResult bindingResult) {
